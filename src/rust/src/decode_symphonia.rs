@@ -75,7 +75,7 @@ pub fn load(
     }
 
     let mut duration_to_decode_samples = (duration_to_decode * (sr as f64)) as u32; // Round to the lower bound integer by default. fix conversion
-    // Store the track identifier, we'll use it to filter packets.
+                                                                                    // Store the track identifier, we'll use it to filter packets.
     let track_id = track.id;
     let mut sample_buf = None;
     let mut arr = Array2::<f64>::zeros((channels, duration_to_decode_samples as usize));
@@ -86,7 +86,10 @@ pub fn load(
         let packet = match format.next_packet() {
             Ok(packet_ok) => packet_ok,
             Err(Error::IoError(ref packet_err))
-                if packet_err.kind() == std::io::ErrorKind::UnexpectedEof => { break; }
+                if packet_err.kind() == std::io::ErrorKind::UnexpectedEof =>
+            {
+                break;
+            }
             Err(packet_err) => panic!("{:?}", packet_err),
         };
 
@@ -166,37 +169,37 @@ pub fn load(
     arr
 }
 
-pub fn get_duration(path: &Path, filetype: &str) -> f64 {
-    let file = Box::new(File::open(path).expect("cannot open file"));
+// pub fn get_duration(path: &Path, filetype: &str) -> f64 {
+//     let file = Box::new(File::open(path).expect("cannot open file"));
 
-    let mss = MediaSourceStream::new(file, Default::default());
+//     let mss = MediaSourceStream::new(file, Default::default());
 
-    let mut hint = Hint::new();
-    hint.with_extension(filetype);
+//     let mut hint = Hint::new();
+//     hint.with_extension(filetype);
 
-    let format_opts: FormatOptions = Default::default();
-    let metadata_opts: MetadataOptions = Default::default();
+//     let format_opts: FormatOptions = Default::default();
+//     let metadata_opts: MetadataOptions = Default::default();
 
-    let probed = symphonia::default::get_probe()
-        .format(&hint, mss, &format_opts, &metadata_opts)
-        .expect("unsupported format");
+//     let probed = symphonia::default::get_probe()
+//         .format(&hint, mss, &format_opts, &metadata_opts)
+//         .expect("unsupported format");
 
-    let format = probed.format;
+//     let format = probed.format;
 
-    let track = format.default_track().expect("cannot get default_track");
+//     let track = format.default_track().expect("cannot get default_track");
 
-    let sr = track
-        .codec_params
-        .sample_rate
-        .expect("cannot retrieve the sample rate");
+//     let sr = track
+//         .codec_params
+//         .sample_rate
+//         .expect("cannot retrieve the sample rate");
 
-    let n_frames = track
-        .codec_params
-        .n_frames
-        .expect("cannot retrieve n_frames");
+//     let n_frames = track
+//         .codec_params
+//         .n_frames
+//         .expect("cannot retrieve n_frames");
 
-    n_frames as f64 / (sr as f64) // fix n_frames conversion
-}
+//     n_frames as f64 / (sr as f64) // fix n_frames conversion
+// }
 
 pub fn get_samplerate(path: &Path, filetype: &str) -> u32 {
     let file = Box::new(File::open(path).expect("cannot open file"));
