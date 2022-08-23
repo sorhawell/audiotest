@@ -19,3 +19,19 @@ play <- function(r_arr, sr) invisible(.Call(wrap__play, r_arr, sr))
 
 test_in_R <- function() invisible(.Call(wrap__test_in_R))
 
+#' @export
+load2 <- function(fname, mono, offset, duration) .Call(wrap__load2, fname, mono, offset, duration)
+
+#' @export
+play2 <- function(abar, sr) invisible(.Call(wrap__play2, abar, sr))
+
+ArrayBaseR <- new.env(parent = emptyenv())
+
+ArrayBaseR$print <- function() invisible(.Call(wrap__ArrayBaseR__print, self))
+
+#' @export
+`$.ArrayBaseR` <- function (self, name) { func <- ArrayBaseR[[name]]; environment(func) <- environment(); func }
+
+#' @export
+`[[.ArrayBaseR` <- `$.ArrayBaseR`
+

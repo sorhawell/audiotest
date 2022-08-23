@@ -1,6 +1,6 @@
-use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
-use cpal::{BufferSize, Sample, SampleRate, StreamConfig};
-use ndarray::ArrayView2;
+pub use cpal::traits::{DeviceTrait, HostTrait, StreamTrait};
+pub use cpal::{BufferSize, Sample, SampleRate, StreamConfig};
+pub use ndarray::ArrayView2;
 
 pub fn play(arr: &ArrayView2<f64>, sr: u32) {
     let channels = arr.nrows();
