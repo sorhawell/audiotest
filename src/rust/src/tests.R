@@ -1,0 +1,2 @@
+rextendr::document()
+devtools::load_all(".")
